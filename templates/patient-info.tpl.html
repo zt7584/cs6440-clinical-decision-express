@@ -1,0 +1,15 @@
+<div class="form-group">
+  <div class="input-group">
+    <span class="input-group-addon">Patient ID</span>
+    <input type="text" class="form-control" ng-model="searchParam"></input>
+    <span class="input-group-btn">
+     <button class="btn btn-default" type="button" ng-click="SearchPatientById(searchParam)">Search</button>
+   </span>
+ </div>
+</div>
+<div ng-show="curPatient">
+  <h2>Name: {{ curPatientName }}</h2>
+  <h2>Gender: {{ curPatient.gender }}</h2>
+  <h2>DOB: {{ curPatient.birthDate }}</h2>
+  <h2>Address: {{ curPatientAddress }}</h2>
+</div>
