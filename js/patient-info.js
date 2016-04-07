@@ -7,7 +7,7 @@ app.controller("PatientInfoController", ["$scope", "FHIRService", "ElasticServic
         $scope.curPatient = data.entry[0].resource;
         $scope.curPatientName = getPatientName($scope.curPatient);
         $scope.curPatientAddress = getPatientAddress($scope.curPatient);
-				ElasticService.putBulk('patients', 'patient', $scope.curPatient.id, $scope.curPatient);
+				ElasticService.putSingle('patients', 'patient', $scope.curPatient.id, $scope.curPatient);
       });
     }
 
@@ -18,6 +18,15 @@ app.controller("PatientInfoController", ["$scope", "FHIRService", "ElasticServic
     var getPatientAddress = function(patient) {
       return patient.address[0].line + ", " + patient.address[0].city + ", " 
         + patient.address[0].state + " " + patient.address[0].postalCode;
+    }
+
+    $scope.PutPatientIntoElasticSearch = function(startId, endId) {
+      for (var iter = startId; iter <= endId; iter++) {
+        FHIRService.getPatientById(iter, function(data) {
+          var patient = data.entry[0].resource;
+          ElasticService.putSingle('patients', 'patient', patient.id, patient);
+        });
+      }
     }
   }
 ]);

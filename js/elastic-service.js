@@ -4,10 +4,10 @@ elasticService.provider("ElasticService", [
   function() {
     this.$get = ["$http", "$base64", function($http, $base64) {
       return {
-        putBulk: function(index, type, id, data) {
-					$http.defaults.headers.common.Authorization = 'Basic ' + $base64.encode('admin:admin');
+        putSingle: function(index, type, id, data) {
+					$http.defaults.headers.common.Authorization = 'Basic ' + $base64.encode(USERNAME + ':' + PASSWORD);
           $http.put(
-            PUT_JSON
+            PUT_JSON_SINGLE
 						.replace(INDEX_HOLDER, index)
 						.replace(TYPE_HOLDER, type)
 						.replace(ID_HOLDER, id),
@@ -19,7 +19,8 @@ elasticService.provider("ElasticService", [
           .error(function(error) {
             console.log(error);
           })
-        }
+        },
+				
       }
     }];
   }
