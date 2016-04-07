@@ -1,12 +1,13 @@
 var app = angular.module('patient-info', []);
 
-app.controller("PatientInfoController", ["$scope", "FHIRService",
-  function($scope, FHIRService) {
+app.controller("PatientInfoController", ["$scope", "FHIRService", "ElasticService",
+  function($scope, FHIRService, ElasticService) {
     $scope.SearchPatientById = function(id) {
       FHIRService.getPatientById(id, function(data) {
         $scope.curPatient = data.entry[0].resource;
         $scope.curPatientName = getPatientName($scope.curPatient);
         $scope.curPatientAddress = getPatientAddress($scope.curPatient);
+				ElasticService.putBulk('patients', 'patient', $scope.curPatient.id, $scope.curPatient);
       });
     }
 
