@@ -1,36 +1,40 @@
 <html lang="en" ng-app="app">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- CSS -->
-  <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-  <link href="assets/css/custom.css" rel="stylesheet">
+    <!-- CSS -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/custom.css" rel="stylesheet">
+    <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
 
-  <!-- JavaScript Libraries -->
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-	<script src="bower_components/elastic.js/dist/elastic.js"></script>
-	<script src="bower_components/elasticui/dist/elasticui.js"></script>
-	<script src="bower_components/elasticsearch/elasticsearch.angular.js"></script>
-	<script src="bower_components/angular-base64/angular-base64.js"></script>
+    <!-- JavaScript Libraries -->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/elastic.js/dist/elastic.js"></script>
+    <script src="bower_components/elasticui/dist/elasticui.js"></script>
+    <script src="bower_components/elasticsearch/elasticsearch.angular.js"></script>
+    <script src="bower_components/angular-base64/angular-base64.js"></script>
+    <script src="bower_components/Chart.js/Chart.js"></script>
+    <script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
 
-  <!-- JavaScript Logic -->
-  <script src="js/app.js"></script>
-  <script src="js/routes.js"></script>
-  <script src="js/constants.js"></script>
-  <script src="js/common-utils.js"></script>
-  <script src="js/fhir-service.js"></script>
-	<script src="js/elastic-service.js"></script>
-  <script src="js/patient-info.js"></script>
+    <!-- JavaScript Logic -->
+    <script src="js/app.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/common-utils.js"></script>
+    <script src="js/fhir-service.js"></script>
+    <script src="js/elastic-service.js"></script>
+    <script src="js/patient-info.js"></script>
+    <script src="js/diagnotic-reports.js"></script>
 
-  <!-- Body -->
-  <body>
-    <!-- Header -->
-    <div ng-include="'templates/header.tpl.html'"></div>
+    <!-- Body -->
+    <body>
+        <!-- Header -->
+        <div ng-include="'templates/header.tpl.html'"></div>
 
-    <!-- Main -->
-    <div ui-view="main" class="container-fluid" autoscroll="false"></div>
+        <!-- Main -->
+        <div ui-view="main" class="container-fluid" autoscroll="false"></div>
 
-    <!-- Footer -->
-    <div ng-include="'templates/footer.tpl.html'"></div>
-  </body>
+        <!-- Footer -->
+        <div ng-include="'templates/footer.tpl.html'"></div>
+    </body>
 </html>

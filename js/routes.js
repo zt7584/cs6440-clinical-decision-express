@@ -10,6 +10,15 @@ angular.module('app.routes',
                     controller: 'PatientInfoController'
                 }
             }
+        })
+        .state('diagnostic-reports', {
+            url: '/dr',
+            views: {
+                "main" : {
+                    templateUrl: 'templates/diagnostic-reports-list.html',
+                    controller: 'DiagnosticReportsController'
+                }
+            }
         });
 
     $urlRouterProvider.otherwise('/');

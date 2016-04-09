@@ -15,6 +15,17 @@ fhirService.provider("FHIRService", [
           .error(function(error) {
             console.log(error);
           })
+        },
+        fetchDiagnosticReports: function(callbackFunc) {
+          $http.get(
+              FETCH_DIAGNOSTIC_REPORTS
+          )
+          .success(function(data) {
+            callbackFunc(data);
+          })
+          .error(function(error) {
+            console.log(error);
+          })
         }
       }
     }];

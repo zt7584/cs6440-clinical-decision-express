@@ -1,0 +1,55 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Statistics Chart
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Encounter
+                    </div>
+                    <div class="panel-body">
+                        <canvas id="encounterPie" class="chart chart-pie"
+                            chart-data="encounterData" chart-labels="encounterLabels">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Performer
+                    </div>
+                    <div class="panel-body">
+                        <canvas id="performerPie" class="chart chart-doughnut"
+                                chart-data="performerData" chart-labels="performerLabels">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-warning">
+    <div class="panel-heading">
+        Related Diagnostic Reports
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3" ng-repeat="dr in diagnosticReports">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {{ dr.resource.id }}
+                    </div>
+                    <div class="panel-body">
+                        <p>Time: {{ dr.resource.meta.lastUpdated }}</p>
+                        <p>Performer: {{ dr.resource.performer.display }}</p>
+                        <p>Encounter: {{ dr.resource.encounter.display }}</p>
+                        <p ng-repeat="cd in dr.resource.codedDiagnosis">{{ cd.text }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

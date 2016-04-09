@@ -15,3 +15,6 @@ var GET_PATIENT_BY_ID = BASE_URL + "Patient?_id=" + ID_HOLDER + "&" + JSON_FORMA
 
 // Elastic Search Cloud
 var PUT_JSON_SINGLE = ELASTIC_SEARCH_CLOUD_BASE + INDEX_HOLDER + "/" + TYPE_HOLDER + "/" + ID_HOLDER;
+
+// Diagnostic Reports Related
+var FETCH_DIAGNOSTIC_REPORTS = BASE_URL + "DiagnosticReport?diagnosis=2.16.840.1.113883.6.96|190330002";
