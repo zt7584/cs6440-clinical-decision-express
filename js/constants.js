@@ -1,4 +1,5 @@
-var BASE_URL = "http://polaris.i3l.gatech.edu:8080/gt-fhir-webapp/base/";
+//var BASE_URL = "http://polaris.i3l.gatech.edu:8080/gt-fhir-webapp/base/";
+var BASE_URL = "http://52.72.172.54:8080/fhir/baseDstu2/"
 var JSON_FORMAT = "_format=json";
 var ELASTIC_SEARCH_CLOUD_BASE = "http://383841da62cb454fa7ad4d51c9685e7c.us-west-1.aws.found.io:9200/";
 var USERNAME = "admin";

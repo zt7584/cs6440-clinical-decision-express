@@ -2,12 +2,18 @@ var app = angular.module('patient-info', []);
 
 app.controller("PatientInfoController", ["$scope", "FHIRService", "ElasticService",
   function($scope, FHIRService, ElasticService) {
+
+    /*
+     * Patient Related Information
+     */
+    $scope.searchParam = 'Patient-16687';
+
     $scope.SearchPatientById = function(id) {
       FHIRService.getPatientById(id, function(data) {
         $scope.curPatient = data.entry[0].resource;
         $scope.curPatientName = getPatientName($scope.curPatient);
         $scope.curPatientAddress = getPatientAddress($scope.curPatient);
-				ElasticService.putSingle('patients', 'patient', $scope.curPatient.id, $scope.curPatient);
+        //ElasticService.putSingle('patients', 'patient', $scope.curPatient.id, $scope.curPatient);
       });
     }
 
@@ -27,6 +33,20 @@ app.controller("PatientInfoController", ["$scope", "FHIRService", "ElasticServic
           ElasticService.putSingle('patients', 'patient', patient.id, patient);
         });
       }
+    }
+
+    /*
+     * Symptom Keyword
+     */
+    $scope.symptomKeywords = [];
+    $scope.AddSymptomKeyword = function(keyword) {
+      if (keyword !== "") {
+        $scope.symptomKeywords.push(keyword);
+        $scope.symptomKeyword = "";
+      }
+    }
+    $scope.RemoveSymptomKeyword = function(index) {
+      $scope.symptomKeywords.splice(index, 1);
     }
   }
 ]);

@@ -1,34 +1,93 @@
-<div class="form-group">
-    <div class="input-group">
-        <span class="input-group-addon">Patient ID</span>
-        <input type="text" class="form-control" ng-model="searchParam" />
-    <span class="input-group-btn">
-     <button class="btn btn-default" type="button" ng-click="SearchPatientById(searchParam)">Search</button>
-   </span>
-    </div>
-</div>
-<div ng-show="curPatient">
-    <h2>Name: {{ curPatientName }}</h2>
-    <h2>Gender: {{ curPatient.gender }}</h2>
-    <h2>DOB: {{ curPatient.birthDate }}</h2>
-    <h2>Address: {{ curPatientAddress }}</h2>
-</div>
-<div class="form-group">
-    <div class="row">
-        <div class="col-md-5">
-            <div class="input-group">
-                <span class="input-group-addon">Start Patient ID</span>
-                <input type="text" class="form-control" ng-model="startPatientID" />
-            </div>
-        </div>
-        <div class="col-md-5">
-            <div class="input-group">
-                <span class="input-group-addon">End Patient ID</span>
-                <input type="text" class="form-control" ng-model="endPatientID" />
-            </div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-default" type="button" ng-click="PutPatientIntoElasticSearch(startPatientID, endPatientID)">Put Into Elastic Search</button>
+<div class="container">
+    <div class="form-group">
+        <div class="input-group">
+            <span class="input-group-addon btn-primary">Patient ID</span>
+            <input type="text" class="form-control" ng-model="searchParam"/>
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="SearchPatientById(searchParam)">Search</button>
+            </span>
         </div>
     </div>
+    <div ng-show="curPatient" class="panel panel-primary">
+        <div class="panel-heading">
+            Patient Information
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td>{{ curPatientName }}</td>
+                </tr>
+                <tr>
+                    <td>Gender</td>
+                    <td>{{ curPatient.gender }}</td>
+                </tr>
+                <tr>
+                    <td>DOB</td>
+                    <td>{{ curPatient.birthDate }}</td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td>{{ curPatientAddress }}</td>
+                </tr>
+                <tr ng-repeat="phone in curPatient.telecom">
+                    <td>{{ phone.use }}</td>
+                    <td>{{ phone.value }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div ng-show="curPatient" class="panel panel-warning">
+        <div class="panel-heading">
+            Patient Symptoms Collector
+        </div>
+        <div class="panel-body">
+            <div class="input-group">
+                <span class="input-group-addon">Symptom Keywords</span>
+                <input type="text" class="form-control" ng-model="symptomKeyword"/>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" ng-click="AddSymptomKeyword(symptomKeyword)">Add
+                    </button>
+                </span>
+            </div>
+            <div class="panel panel-default margin-top-5px">
+                <div class="panel-heading">
+                    Symptoms
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="btn-group pull-left margin-left-5px margin-top-5px" ng-repeat="keyword in symptomKeywords track by $index">
+                                <a class="btn btn-info">{{ keyword }}</a>
+                                <a class="btn btn-danger" ng-click="RemoveSymptomKeyword($index)"><span class="glyphicon glyphicon-remove"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="form-group">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon">Start Patient ID</span>
+                    <input type="text" class="form-control" ng-model="startPatientID"/>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-addon">End Patient ID</span>
+                    <input type="text" class="form-control" ng-model="endPatientID"/>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-default" type="button"
+                        ng-click="PutPatientIntoElasticSearch(startPatientID, endPatientID)">Put Into Elastic Search
+                </button>
+            </div>
+        </div>
+    </div> -->
 </div>
