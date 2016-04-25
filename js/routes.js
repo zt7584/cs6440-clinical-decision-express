@@ -6,7 +6,7 @@ angular.module('app.routes',
             url: '/',
             views: {
                 "main" : {
-                    templateUrl: 'templates/patient-info.tpl.html',
+                    templateUrl: 'templates/patient-info.html',
                     controller: 'PatientInfoController'
                 }
             }

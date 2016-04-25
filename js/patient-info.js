@@ -1,7 +1,7 @@
 var app = angular.module('patient-info', []);
 
-app.controller("PatientInfoController", ["$scope", "FHIRService", "ElasticService",
-    function ($scope, FHIRService, ElasticService) {
+app.controller("PatientInfoController", ["$scope", "$state", "FHIRService", "ElasticService",
+    function ($scope, $state, FHIRService, ElasticService) {
 
         /*
          * Patient Related Information
@@ -47,6 +47,11 @@ app.controller("PatientInfoController", ["$scope", "FHIRService", "ElasticServic
         }
         $scope.RemoveSymptomKeyword = function (index) {
             $scope.symptomKeywords.splice(index, 1);
+        }
+
+        $scope.searchDiagnosticReport = function() {
+            // TODO: Need to cache information of current page
+            $state.go('diagnostic-reports');
         }
 
         /*

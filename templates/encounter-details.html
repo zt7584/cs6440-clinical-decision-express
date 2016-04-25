@@ -1,0 +1,67 @@
+<div class="modal-header">
+    <div class="modal-title">
+        <h4>Encounter: {{ encounter.id }}<i class="glyphicon glyphicon-remove pull-right clickable" ng-click="Cancel()"></i></h4>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="list-group">
+        <div class="list-group-item list-group-item-header">
+            Status
+        </div>
+        <div class="list-group-item">
+            <label>{{ encounter.status }}</label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Class
+        </div>
+        <div class="list-group-item">
+            <label>{{ encounter.class }}</label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Patient
+        </div>
+        <div class="list-group-item center-vertical-height-39-px">
+            <label>{{ encounter.patient.display }}</label>
+            <button class="btn btn-primary pull-right" ng-click="openPatientDetails(encounter.patient.reference)">View Patient Details</button>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Participant
+        </div>
+        <div ng-repeat="participant in encounter.participant">
+            <div class="list-group-item" >
+                <label>{{ "From: " + participant.period.start + " To: " + participant.period.end}}</label>
+            </div>
+            <div class="list-group-item center-vertical-height-39-px">
+                <label>{{ participant.individual.display }}</label>
+                <button class="btn btn-primary pull-right" ng-click="openParticipantDetails(participant.individual.reference)">View Participant Details</button>
+            </div>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Period
+        </div>
+        <div class="list-group-item">
+            <label>{{ "From: " + encounter.period.start + " To: " + encounter.period.end}}</label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Indication
+        </div>
+        <div class="list-group-item center-vertical-height-39-px" ng-repeat="indication in encounter.indication">
+            <label>{{ indication.display }}</label>
+            <button class="btn btn-primary pull-right" ng-click="openConditionDetails(indication.reference)">View Indication Details</button>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Location
+        </div>
+        <div class="list-group-item center-vertical-height-39-px" ng-repeat="location in encounter.location">
+            <label>{{ location.location.display }}</label>
+            <button class="btn btn-primary pull-right" ng-click="openLocationDetails(location.location.reference)">View Location Details</button>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Service Provider
+        </div>
+        <div class="list-group-item center-vertical-height-39-px">
+            <label>{{ encounter.serviceProvider.display }}</label>
+            <button class="btn btn-primary pull-right" ng-click="openOrganizationDetails(encounter.serviceProvider.reference)">View Organization Details</button>
+        </div>
+    </div>
+</div>

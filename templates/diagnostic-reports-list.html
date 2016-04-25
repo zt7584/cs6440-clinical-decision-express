@@ -31,14 +31,14 @@
         </div>
     </div>
 </div>
-<div class="panel panel-warning">
+<div class="panel panel-warning margin-bottom-60px">
     <div class="panel-heading">
         Related Diagnostic Reports
     </div>
     <div class="panel-body">
         <div class="row">
             <div class="col-md-3" ng-repeat="dr in diagnosticReports">
-                <div class="panel panel-default">
+                <div class="panel panel-default clickable" ng-click="openDiagnosticReportDetails(dr)">
                     <div class="panel-heading">
                         {{ dr.resource.id }}
                     </div>

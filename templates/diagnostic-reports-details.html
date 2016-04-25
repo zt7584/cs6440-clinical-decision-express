@@ -1,0 +1,53 @@
+<div class="modal-header">
+    <div class="modal-title">
+        <h4>Diagnostic Report: {{ diagnosticReport.id }}<i class="glyphicon glyphicon-remove pull-right clickable" ng-click="Cancel()"></i></h4>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="list-group">
+        <div class="list-group-item list-group-item-header">
+            Status
+        </div>
+        <div class="list-group-item">
+            <label>{{ diagnosticReport.status }}</label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Code
+        </div>
+        <div class="list-group-item" ng-repeat="code in diagnosticReport.code.coding">
+            <p>System: {{ code.system }}</p>
+            <p>Code: {{ code.code }}</p>
+            <p>Display: {{ code.display }}</p>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Subject
+        </div>
+        <div class="list-group-item center-vertical-height-39-px">
+            <label>{{ diagnosticReport.subject.display }}</label>
+            <button class="btn btn-primary pull-right" ng-click="openPatientDetails(diagnosticReport.subject.reference)">View Patient Details</button>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Encounter
+        </div>
+        <div class="list-group-item center-vertical-height-39-px">
+            <label>{{ diagnosticReport.encounter.display }}</label>
+            <button class="btn btn-primary pull-right" ng-click="openEncounterDetails(diagnosticReport.encounter.reference)">View Encounter Details</button>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Performer
+        </div>
+        <div class="list-group-item center-vertical-height-39-px">
+            <label>{{ diagnosticReport.performer.display }}</label>
+            <button class="btn btn-primary pull-right" ng-click="openPerformerDetails(diagnosticReport.performer.reference)">View Performer Details</button>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Coded Diagnosis
+        </div>
+        <div class="list-group-item" ng-repeat="cd in diagnosticReport.codedDiagnosis">
+            <div ng-repeat="cdd in cd.coding">
+                <p>System: {{ cdd.system }}</p>
+                <p>Code: {{ cdd.code }}</p>
+            </div>
+        </div>
+    </div>
+</div>
