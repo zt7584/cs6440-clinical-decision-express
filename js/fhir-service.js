@@ -104,6 +104,19 @@ fhirService.provider("FHIRService", [
                         .error(function (error) {
                             console.log(error);
                         })
+                },
+                getConditionById: function (id, callbackFunc) {
+                    delete $http.defaults.headers.common['Authorization'];
+                    $http.get(
+                        GET_CONDITION_BY_ID
+                            .replace(ID_HOLDER, id)
+                    )
+                        .success(function (data) {
+                            callbackFunc(data);
+                        })
+                        .error(function (error) {
+                            console.log(error);
+                        })
                 }
             }
         }];

@@ -1,0 +1,56 @@
+<div class="modal-header">
+    <div class="modal-title">
+        <h4>Condition: {{ condition.id }}<i class="glyphicon glyphicon-remove pull-right clickable" ng-click="Cancel()"></i></h4>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="list-group">
+        <div class="list-group-item list-group-item-header">
+            Patient
+        </div>
+        <div class="list-group-item center-vertical-height-39-px">
+            <label>{{ condition.patient.display }}</label>
+            <button class="btn btn-primary pull-right" ng-click="openPatientDetails(condition.patient.reference)">View Patient Details</button>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Asserter
+        </div>
+        <div class="list-group-item center-vertical-height-39-px">
+            <label>{{ condition.asserter.display }}</label>
+            <button class="btn btn-primary pull-right" ng-click="openAsserterDetails(condition.asserter.reference)">View Asserter Details</button>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Date Recorded
+        </div>
+        <div class="list-group-item">
+            <label>{{ condition.dateRecorded }}</label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Code
+        </div>
+        <div class="list-group-item">
+            <label>{{ condition.code.text }}</label>
+        </div>
+        <div class="list-group-item" ng-repeat="cd in condition.code.coding">
+            <label>{{ cd.display + " (Code: " + cd.code + ")" }}</label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Clinical Status
+        </div>
+        <div class="list-group-item">
+            <label>{{ condition.clinicalStatus }}</label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Severity
+        </div>
+        <div class="list-group-item" ng-repeat="coding in condition.severity.coding">
+            <label>{{ coding.display + " (Code: " + coding.code + ")" }}</label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Onset Date Time
+        </div>
+        <div class="list-group-item">
+            <label>{{ condition.onsetDateTime }}</label>
+        </div>
+    </div>
+</div>

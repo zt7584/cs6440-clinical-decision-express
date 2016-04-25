@@ -5,6 +5,55 @@
 </div>
 <div class="modal-body">
     <div class="list-group">
+        <div class="list-group-item list-group-item-header">
+            Name
+        </div>
+        <div class="list-group-item">
+            <label>{{ practitionerName }}</label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Address
+        </div>
+        <div class="list-group-item">
+            <label>{{ practitionerAddress }}</label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Gender
+        </div>
+        <div class="list-group-item">
+            <label>{{ practitioner.gender }}</label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            DOB
+        </div>
+        <div class="list-group-item">
+            <label>{{ practitioner.birthDate }}</label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Contact
+        </div>
+        <div class="list-group-item" ng-repeat="phone in practitioner.telecom">
+            <label>{{ phone.use + ": " + phone.value }}</label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Extension
+        </div>
+        <div class="list-group-item" ng-repeat="ext in practitioner.extension">
+            <label ng-repeat="coding in ext.valueCodeableConcept.coding">
+                {{ coding.display + "(Code: " + coding.code + ")" }}
+            </label>
+        </div>
+        <div class="list-group-item list-group-item-header">
+            Qualification
+        </div>
+        <div class="list-group-item" ng-repeat="qa in practitioner.qualification">
+            <div>
+                <label ng-repeat="qai in qa.identifier">
+                    {{ "Identifier: " + qai.type.text + " Assigned By " + qai.assigner.display }}
+                </label><br />
+            </div>
 
+            <label>{{ "Issuer: " + qa.issuer.display }}</label>
+        </div>
     </div>
 </div>

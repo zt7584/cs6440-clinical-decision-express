@@ -52,16 +52,22 @@
         <div class="list-group-item list-group-item-header">
             Location
         </div>
-        <div class="list-group-item center-vertical-height-39-px" ng-repeat="location in encounter.location">
+        <div class="list-group-item" ng-repeat="location in encounter.location">
+            <label>{{ location.location.display }}</label>
+        </div>
+        <!-- <div class="list-group-item center-vertical-height-39-px" ng-repeat="location in encounter.location">
             <label>{{ location.location.display }}</label>
             <button class="btn btn-primary pull-right" ng-click="openLocationDetails(location.location.reference)">View Location Details</button>
-        </div>
+        </div> -->
         <div class="list-group-item list-group-item-header">
             Service Provider
         </div>
-        <div class="list-group-item center-vertical-height-39-px">
+        <div class="list-group-item">
+            <label>{{ encounter.serviceProvider.display }}</label>
+        </div>
+        <!-- <div class="list-group-item center-vertical-height-39-px">
             <label>{{ encounter.serviceProvider.display }}</label>
             <button class="btn btn-primary pull-right" ng-click="openOrganizationDetails(encounter.serviceProvider.reference)">View Organization Details</button>
-        </div>
+        </div> -->
     </div>
 </div>

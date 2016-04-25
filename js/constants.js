@@ -30,6 +30,9 @@ var FETCH_OBSERVATION_BY_ID = BASE_URL + "Observation?_id=" + ID_HOLDER;
 var GET_ENCOUNTER_BY_ID = BASE_URL + "Encounter?_id=" + ID_HOLDER;
 var GET_PRACTITIONER_BY_ID = BASE_URL + "Practitioner?_id=" + ID_HOLDER;
 
+// Condition Related
+var GET_CONDITION_BY_ID = BASE_URL + "Condition?_id=" + ID_HOLDER;
+
 var getPatientName = function (patient) {
     return patient.name[0].given.join(" ") + " " + patient.name[0].family.join(" ");
 }

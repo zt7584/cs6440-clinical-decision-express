@@ -114,6 +114,26 @@ app.controller("PractitionerDetailsController", ["$scope", "$uibModalInstance", 
     function($scope, $uibModalInstance, practitioner) {
         $scope.practitioner = practitioner;
 
+        var getFullName = function(practitioner) {
+            var name = "";
+            if (practitioner.name.given !== undefined) {
+                name += practitioner.name.given.join(" ") + " ";
+            }
+            if (practitioner.name.family !== undefined) {
+                name += practitioner.name.family.join(" ") + " ";
+            }
+            if (practitioner.name.suffix !== undefined) {
+                name += practitioner.name.suffix.join(" ") + " ";
+            }
+            return name;
+        }
+        $scope.practitionerName = getFullName(practitioner);
+
+        var getFullAddress = function (practitioner) {
+            return practitioner.address[0].line.join(" ") + ", " + practitioner.address[0].city + ", "
+                + practitioner.address[0].state + " " + practitioner.address[0].postalCode;
+        }
+        $scope.practitionerAddress = getFullAddress(practitioner);
 
         $scope.Cancel = function() {
             $uibModalInstance.dismiss('cancel');
@@ -140,19 +160,77 @@ app.controller("EncounterDetailsController", ["$scope", "$uibModalInstance", "$u
         }
 
         $scope.openParticipantDetails = function(participantId) {
-
+            FHIRService.getPractitionerById(participantId, function(data) {
+                $uibModal.open({
+                    templateUrl: 'templates/practitioner-details.html?bust=' + Math.random().toString(36).slice(2),
+                    controller: 'PractitionerDetailsController',
+                    resolve: {
+                        practitioner: function() {
+                            return data.entry[0].resource;
+                        }
+                    }
+                });
+            });
         }
 
-        $scope.openConditionDetails = function(participantId) {
-
+        $scope.openConditionDetails = function(conditionId) {
+            FHIRService.getConditionById(conditionId, function(data) {
+                $uibModal.open({
+                    templateUrl: 'templates/condition-details.html?bust=' + Math.random().toString(36).slice(2),
+                    controller: 'ConditionDetailsController',
+                    resolve: {
+                        condition: function() {
+                            return data.entry[0].resource;
+                        }
+                    }
+                });
+            });
         }
 
-        $scope.openLocationDetails = function(participantId) {
+        /*$scope.openLocationDetails = function(participantId) {
 
         }
 
         $scope.openOrganizationDetails = function(participantId) {
 
+        }*/
+
+        $scope.Cancel = function() {
+            $uibModalInstance.dismiss('cancel');
+        }
+    }
+]);
+
+app.controller("ConditionDetailsController", ["$scope", "$uibModalInstance", "$uibModal", "condition", "FHIRService",
+    function($scope, $uibModalInstance, $uibModal, condition, FHIRService) {
+        $scope.condition = condition;
+
+        $scope.openPatientDetails = function(patientId) {
+            FHIRService.getPatientById(patientId, function(data) {
+                $uibModal.open({
+                    templateUrl: 'templates/patient-details.html?bust=' + Math.random().toString(36).slice(2),
+                    controller: 'PatientDetailsController',
+                    resolve: {
+                        patient: function() {
+                            return data.entry[0].resource;
+                        }
+                    }
+                });
+            });
+        }
+
+        $scope.openAsserterDetails = function(performerId) {
+            FHIRService.getPractitionerById(performerId, function(data) {
+                $uibModal.open({
+                    templateUrl: 'templates/practitioner-details.html?bust=' + Math.random().toString(36).slice(2),
+                    controller: 'PractitionerDetailsController',
+                    resolve: {
+                        practitioner: function() {
+                            return data.entry[0].resource;
+                        }
+                    }
+                });
+            });
         }
 
         $scope.Cancel = function() {
