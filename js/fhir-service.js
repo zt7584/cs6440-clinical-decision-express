@@ -14,7 +14,7 @@ fhirService.provider("FHIRService", [
                             callbackFunc(data);
                         })
                         .error(function (error) {
-                            console.log(error);
+                            callbackFunc(false);
                         })
                 },
                 fetchPatients: function (url, callbackFunc) {

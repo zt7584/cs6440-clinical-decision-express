@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="row margin-top-15">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="form-group">
+                <div class="input-group">
+                    <span uib-popover="Step 1: Enter Patient ID For System To Fetch Patient Information"
+                          popover-trigger="mouseenter"
+                          class="input-group-addon">Patient ID</span>
+                    <input id="currentPatientId" type="text" class="form-control"
+                           uib-typeahead="patientId for patientId in getPatientID($viewValue)"
+                           ng-model="currentPatientId"
+                           typeahead-loading="loadingLocations"
+                           typeahead-no-results="noResults"
+                           typeahead-on-select="onSelect($item)">
+                </div>
+            </div>
+            <div class="text-center">
+                <button uib-popover="Step 1: Enter Patient ID For System To Fetch Patient Information"
+                        popover-trigger="mouseenter"
+                        class="btn btn-primary"
+                        type="button"
+                        ng-click="SearchPatientById(currentPatientId)">Search Patient</button>
+            </div>
+        </div>
+        <div class="col-md-6 col-md-offset-3 margin-top-15px">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Project Information
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            Description:
+                        </div>
+                        <div class="col-md-9">
+                            Clinical Decision Express is a clinical decision support tool for physicians which can provide convenient dashboard and accessible search tool for doctors to gather relevant information from similar cases/diagnosis to aid clinical decision.
+                        </div>
+                    </div>
+                    <div class="row margin-top-5px">
+                        <div class="col-md-3">
+                            Team Member:
+                        </div>
+                        <div class="col-md-9">
+                            Myung (Chris) Kim, Xinqiong Yu, Pengfei Sun, Ling Zhang, Juncai Jia, Teng Zhao.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

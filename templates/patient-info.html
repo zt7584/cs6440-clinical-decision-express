@@ -1,100 +1,90 @@
-<div class="container">
-    <div class="form-group">
-        <div class="input-group">
-            <span class="input-group-addon btn-primary">Patient ID</span>
-            <input type="text" class="form-control" ng-model="searchParam"/>
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="button" ng-click="SearchPatientById(searchParam)">Search</button>
-            </span>
+<div class="row">
+    <div class="col-md-4">
+        <div ng-show="curPatient" class="panel panel-primary">
+            <div uib-popover="Step 2: Doctor Can Review Patient Basic Information"
+                 popover-trigger="mouseenter"
+                 class="panel-heading">
+                Patient Information
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>{{ curPatientName }}</td>
+                    </tr>
+                    <tr>
+                        <td>Gender</td>
+                        <td>{{ curPatient.gender }}</td>
+                    </tr>
+                    <tr>
+                        <td>DOB</td>
+                        <td>{{ curPatient.birthDate }}</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>{{ curPatientAddress }}</td>
+                    </tr>
+                    <tr ng-repeat="phone in curPatient.telecom">
+                        <td>{{ phone.use }}</td>
+                        <td>{{ phone.value }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    <div ng-show="curPatient" class="panel panel-primary">
-        <div class="panel-heading">
-            Patient Information
-        </div>
-        <div class="panel-body">
-            <table class="table">
-                <tbody>
-                <tr>
-                    <td>Name</td>
-                    <td>{{ curPatientName }}</td>
-                </tr>
-                <tr>
-                    <td>Gender</td>
-                    <td>{{ curPatient.gender }}</td>
-                </tr>
-                <tr>
-                    <td>DOB</td>
-                    <td>{{ curPatient.birthDate }}</td>
-                </tr>
-                <tr>
-                    <td>Address</td>
-                    <td>{{ curPatientAddress }}</td>
-                </tr>
-                <tr ng-repeat="phone in curPatient.telecom">
-                    <td>{{ phone.use }}</td>
-                    <td>{{ phone.value }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div ng-show="curPatient" class="panel panel-warning margin-bottom-60px">
-        <div class="panel-heading">
-            Patient Symptoms Collector
-        </div>
-        <div class="panel-body">
-            <div class="input-group">
-                <span class="input-group-addon">Symptom Keywords</span>
-                <input type="text" class="form-control" ng-model="symptomKeyword"/>
+    <div class="col-md-8">
+        <div ng-show="curPatient" class="panel panel-warning">
+            <div uib-popover="Step 3: Doctor Can Collect Symptom Keywords While Talking to Patient"
+                 popover-trigger="mouseenter"
+                 class="panel-heading">
+                Patient Symptoms Collector
+            </div>
+            <div class="panel-body">
+                <div class="input-group">
+                    <span class="input-group-addon">Symptom Keywords</span>
+                    <input id="symptomKeyword" type="text" class="form-control"
+                           uib-typeahead="vitalsign.keyword for vitalsign in getSymptomKeywords($viewValue)"
+                           ng-model="symptomKeyword"
+                           typeahead-loading="loadingLocations"
+                           typeahead-no-results="noResults"
+                           typeahead-editable="false"
+                           typeahead-on-select="onSelect($item)">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" ng-click="AddSymptomKeyword(symptomKeyword)">Add
+                    <button class="btn btn-default" type="button" ng-click="AddSymptomKeyword()">Add
                     </button>
                 </span>
-            </div>
-            <div class="panel panel-default margin-top-5px" ng-show="symptomKeywords.length !== 0">
-                <div class="panel-heading">
-                    Symptoms
                 </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="btn-group pull-left margin-left-5px margin-top-5px"
-                                 ng-repeat="keyword in symptomKeywords track by $index">
-                                <a class="btn btn-info">{{ keyword }}</a>
-                                <a class="btn btn-danger" ng-click="RemoveSymptomKeyword($index)"><span
-                                        class="glyphicon glyphicon-remove"></span></a>
+                <div class="panel panel-default margin-top-5px" ng-show="symptomKeywords.length !== 0">
+                    <div uib-popover="Type To Select Symptom Keywords From Dropdown List (Ex. Normal Weight)"
+                         popover-trigger="mouseenter"
+                            class="panel-heading">
+                        Symptoms
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="btn-group pull-left margin-left-5px margin-top-5px"
+                                     ng-repeat="vitalsign in symptomKeywords track by $index">
+                                    <a uib-popover="Click To Edit"
+                                       popover-trigger="mouseenter"
+                                       ng-click="EditSymptomKeyword(vitalsign)"
+                                       class="btn btn-info">{{ vitalsign.displayText }}</a>
+                                    <a class="btn btn-danger" ng-click="RemoveSymptomKeyword($index)"><span
+                                            class="glyphicon glyphicon-remove"></span></a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row margin-top-5px" ng-show="symptomKeywords.length !== 0">
-                <div class="col-md-12">
-                    <button class="btn btn-primary form-control" ng-click="searchDiagnosticReport()">Search Diagnostic Report</button>
-                </div>
-            </div>
         </div>
     </div>
-    <!-- <div class="form-group">
-        <div class="row">
-            <div class="col-md-5">
-                <div class="input-group">
-                    <span class="input-group-addon">Start Patient ID</span>
-                    <input type="text" class="form-control" ng-model="startPatientID"/>
-                </div>
-            </div>
-            <div class="col-md-5">
-                <div class="input-group">
-                    <span class="input-group-addon">End Patient ID</span>
-                    <input type="text" class="form-control" ng-model="endPatientID"/>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-default" type="button"
-                        ng-click="PutPatientIntoElasticSearch(startPatientID, endPatientID)">Put Into Elastic Search
-                </button>
-            </div>
-        </div>
-    </div> -->
+</div>
+<div ng-show="curPatient" class="row margin-top-5px margin-bottom-60px">
+    <div class="col-md-12">
+        <button class="btn btn-primary form-control" ng-click="searchDiagnosticReport()">Search Diagnostic Report
+        </button>
+    </div>
 </div>

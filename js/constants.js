@@ -10,12 +10,16 @@ var ID_HOLDER = "<ID>";
 var INDEX_HOLDER = "<INDEX>";
 var TYPE_HOLDER = "<TYPE>";
 
+// DataStore Prefix
+var CDE_DATA_STORE_PREFIX = "cde_";
+
 // Patient Related
 var GET_PATIENT_BY_ID = BASE_URL + "Patient?_id=" + ID_HOLDER + "&" + JSON_FORMAT;
 var FETCH_ALL_PATIENTS = BASE_URL + "Patient";
 
 // Elastic Search Cloud
 var PUT_JSON_SINGLE = ELASTIC_SEARCH_CLOUD_BASE + INDEX_HOLDER + "/" + TYPE_HOLDER + "/" + ID_HOLDER;
+var SEARCH_RESOURCE = ELASTIC_SEARCH_CLOUD_BASE + INDEX_HOLDER + "/" + TYPE_HOLDER + "/_search";
 
 // Diagnostic Reports Related
 var FETCH_DIAGNOSTIC_REPORTS = BASE_URL + "DiagnosticReport?diagnosis=2.16.840.1.113883.6.96|190330002";

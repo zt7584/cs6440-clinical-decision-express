@@ -1,11 +1,80 @@
 var app = angular.module('diagnostic-reports', []);
 
-app.controller("DiagnosticReportsController", ["$scope", "$uibModal", "FHIRService", "ElasticService",
-    function($scope, $uibModal, FHIRService, ElasticService) {
-        FHIRService.fetchDiagnosticReports(FETCH_DIAGNOSTIC_REPORTS, function(data) {
-            $scope.diagnosticReports = data.entry;
-            populateEncounterStatistics($scope.diagnosticReports);
+app.controller("DiagnosticReportsController", ["$scope", "$uibModal", "FHIRService", "ElasticService", "CDEDataProvider",
+    function($scope, $uibModal, FHIRService, ElasticService, CDEDataProvider) {
+
+        var symptomKeywords = CDEDataProvider.getSymptomKeywords();
+        $scope.diagnosticReports = [];
+        var patientIds = [];
+
+        var getObservationInnerQuery = function(operator, key, value) {
+            var inner = {};
+            inner.nested = {};
+            inner.nested.path = "component";
+            inner.nested.query = {};
+            inner.nested.query.bool = {};
+            inner.nested.query.bool.must = [];
+            var term = {};
+            term.term = {};
+            term.term["component.code.coding.display"] = key;
+            var range = {};
+            range.range = {};
+            range.range["component.valueQuantity.value"] = {};
+            range.range["component.valueQuantity.value"][operator] = value;
+            inner.nested.query.bool.must.push(term);
+            inner.nested.query.bool.must.push(range);
+            return inner;
+        }
+
+        var getObservationQuery = function() {
+            var query = {};
+            query.query = {};
+            query.query.bool = {};
+            query.query.bool.must = [];
+            for (var iter = 0; iter < symptomKeywords.length; iter++) {
+                query.query.bool.must.push(getObservationInnerQuery("lt", symptomKeywords[iter].field, symptomKeywords[iter].high_bounds));
+                query.query.bool.must.push(getObservationInnerQuery("gt", symptomKeywords[iter].field, symptomKeywords[iter].low_bounds));
+            }
+            return query;
+        }
+
+        var getDiagnosticReportQuery = function(patientId) {
+            var query = {};
+            query.query = {};
+            query.query.term = {};
+            query.query.term["subject.reference"] = {};
+            query.query.term["subject.reference"]["value"] = patientId;
+            return query;
+        }
+
+        var fetchDiagnosticReport = function(iter) {
+            if (iter < patientIds.length) {
+                ElasticService.searchDiagnosticReports(getDiagnosticReportQuery(patientIds[iter]), function(data) {
+                    var hits = data.hits.hits;
+                    for (var ii = 0; ii < hits.length; ii++) {
+                        var temp = {};
+                        temp.resource = hits[ii]._source;
+                        $scope.diagnosticReports.push(temp);
+                    }
+                    fetchDiagnosticReport(iter + 1);
+                });
+            } else {
+                populateEncounterStatistics($scope.diagnosticReports);
+            }
+        }
+
+        ElasticService.searchObservations(getObservationQuery(), function(data) {
+            var hits = data.hits.hits;
+            for (var iter = 0; iter < hits.length; iter++) {
+                patientIds.push(hits[iter]._source.subject.reference);
+            }
+            fetchDiagnosticReport(0);
         });
+
+        //FHIRService.fetchDiagnosticReports(FETCH_DIAGNOSTIC_REPORTS, function(data) {
+        //    $scope.diagnosticReports = data.entry;
+        //    populateEncounterStatistics($scope.diagnosticReports);
+        //});
 
         $scope.openDiagnosticReportDetails = function(diagnosticReport) {
             $uibModal.open({

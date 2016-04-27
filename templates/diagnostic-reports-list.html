@@ -1,4 +1,16 @@
-<div class="panel panel-primary">
+<div class="panel panel-danger" ng-show="diagnosticReports.length === 0">
+    <div class="panel-heading">
+        Sorry
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                No Diagnostic Found! Please Try Other Sets of Symptom Keywords!
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-primary" ng-show="diagnosticReports.length !== 0">
     <div class="panel-heading">
         Statistics Chart
     </div>
@@ -31,7 +43,7 @@
         </div>
     </div>
 </div>
-<div class="panel panel-warning margin-bottom-60px">
+<div class="panel panel-warning margin-bottom-60px" ng-show="diagnosticReports.length !== 0">
     <div class="panel-heading">
         Related Diagnostic Reports
     </div>

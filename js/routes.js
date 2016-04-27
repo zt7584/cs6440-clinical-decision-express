@@ -2,8 +2,17 @@ angular.module('app.routes',
     ['ui.router'])
 .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
-        .state('patient-info', {
+        .state('index', {
             url: '/',
+            views: {
+                "main" : {
+                    templateUrl: 'templates/main.html',
+                    controller: 'MainController'
+                }
+            }
+        })
+        .state('patient-info', {
+            url: '/pi',
             views: {
                 "main" : {
                     templateUrl: 'templates/patient-info.html',

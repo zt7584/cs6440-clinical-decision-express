@@ -41,7 +41,37 @@ elasticService.provider("ElasticService", [
                         .error(function (error) {
                             console.log(error);
                         })
-                }
+                },
+                searchObservations: function (query, callbackFunc) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $base64.encode(USERNAME + ':' + PASSWORD);
+                    $http.post(
+                        SEARCH_RESOURCE
+                            .replace(INDEX_HOLDER, "fhir")
+                            .replace(TYPE_HOLDER, "observation"),
+                        query
+                    )
+                        .success(function (data) {
+                            callbackFunc(data);
+                        })
+                        .error(function (error) {
+                            callbackFunc(error);
+                        })
+                },
+                searchDiagnosticReports: function (query, callbackFunc) {
+                    $http.defaults.headers.common.Authorization = 'Basic ' + $base64.encode(USERNAME + ':' + PASSWORD);
+                    $http.post(
+                        SEARCH_RESOURCE
+                            .replace(INDEX_HOLDER, "fhir")
+                            .replace(TYPE_HOLDER, "diagnosticreport"),
+                        query
+                    )
+                        .success(function (data) {
+                            callbackFunc(data);
+                        })
+                        .error(function (error) {
+                            callbackFunc(error);
+                        })
+                },
             }
         }];
     }
