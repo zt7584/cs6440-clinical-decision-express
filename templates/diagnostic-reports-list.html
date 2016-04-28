@@ -1,4 +1,16 @@
-<div class="panel panel-danger" ng-show="diagnosticReports.length === 0">
+<div class="panel panel-info" ng-show="diagnosticReports.length === 0 && diagnosticReportsFound">
+    <div class="panel-heading">
+        Loading
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                We are trying to search diagnostic reports for you!
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-danger" ng-show="diagnosticReports.length === 0 && !diagnosticReportsFound">
     <div class="panel-heading">
         Sorry
     </div>
@@ -10,7 +22,7 @@
         </div>
     </div>
 </div>
-<div class="panel panel-primary" ng-show="diagnosticReports.length !== 0">
+<div class="panel panel-primary" ng-show="currentPageDiagnosticReports.length !== 0">
     <div class="panel-heading">
         Statistics Chart
     </div>
@@ -40,16 +52,74 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Code Diagnosis
+                    </div>
+                    <div class="panel-body">
+                        <canvas id="pie" class="chart chart-pie"
+                                chart-data="diagnosisData" chart-labels="diagnosisLabels">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Code Diagnosis (Bar Chart)
+                    </div>
+                    <div class="panel-body">
+                        <canvas id="bar" class="chart chart-bar"
+                                chart-data="diagnosisBarData" chart-labels="diagnosisBarLabels" chart-series="diagnosisBarSeries">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<div class="panel panel-warning margin-bottom-60px" ng-show="diagnosticReports.length !== 0">
+<div class="panel panel-warning margin-bottom-60px" ng-show="currentPageDiagnosticReports.length !== 0">
     <div class="panel-heading">
         Related Diagnostic Reports
     </div>
     <div class="panel-body">
+        <div class="row" ng-click="isFilterReady">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Filter
+                    </div>
+                    <div uib-popover="Only Support Filter On Current Page Now"
+                         popover-trigger="mouseenter"
+                            class="panel-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                Gender:
+                                <select ng-model="gender" class="form-control" ng-change="onGenderFilterChange(gender)">
+                                    <option value="all">All</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <!-- <div class="col-md-3">
+                                Age:
+                                <select ng-model="age" class="form-control" ng-change="onAgeFilterChange(age)">
+                                    <option value="-1">All</option>
+                                    <option value="20">0 ~ 20</option>
+                                    <option value="40">20 ~ 40</option>
+                                    <option value="60">40 ~ 60</option>
+                                    <option value="80">60 ~ 80</option>
+                                    <option value="9999">80+</option>
+                                </select>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
-            <div class="col-md-3" ng-repeat="dr in diagnosticReports">
+            <div class="col-md-3" ng-repeat="dr in currentPageDiagnosticReports | genderFilter:gender">
                 <div class="panel panel-default clickable" ng-click="openDiagnosticReportDetails(dr)">
                     <div class="panel-heading">
                         {{ dr.resource.id }}
@@ -63,5 +133,6 @@
                 </div>
             </div>
         </div>
+        <uib-pagination items-per-page="20" total-items="diagnosticReports.length" ng-model="currentPage" ng-change="pageChanged()"></uib-pagination>
     </div>
 </div>

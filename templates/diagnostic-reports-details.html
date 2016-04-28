@@ -44,6 +44,7 @@
             Coded Diagnosis
         </div>
         <div class="list-group-item" ng-repeat="cd in diagnosticReport.codedDiagnosis">
+            <p>Display: {{ cd.text }}</p>
             <div ng-repeat="cdd in cd.coding">
                 <p>System: {{ cdd.system }}</p>
                 <p>Code: {{ cdd.code }}</p>

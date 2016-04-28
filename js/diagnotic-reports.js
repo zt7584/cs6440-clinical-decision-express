@@ -1,11 +1,25 @@
 var app = angular.module('diagnostic-reports', []);
 
+app.filter('genderFilter', function() {
+    return function(diagnosticReports, gender) {
+        return diagnosticReports.filter(function(diagnosticReport) {
+            if (gender === 'all') {
+                return true;
+            } else {
+                return diagnosticReport.patientObj.gender === gender;
+            }
+        });
+    };
+});
+
 app.controller("DiagnosticReportsController", ["$scope", "$uibModal", "FHIRService", "ElasticService", "CDEDataProvider",
     function($scope, $uibModal, FHIRService, ElasticService, CDEDataProvider) {
 
         var symptomKeywords = CDEDataProvider.getSymptomKeywords();
         $scope.diagnosticReports = [];
         var patientIds = [];
+        $scope.diagnosticReportsFound = true;
+        $scope.isFilterReady = false;
 
         var getObservationInnerQuery = function(operator, key, value) {
             var inner = {};
@@ -16,7 +30,7 @@ app.controller("DiagnosticReportsController", ["$scope", "$uibModal", "FHIRServi
             inner.nested.query.bool.must = [];
             var term = {};
             term.term = {};
-            term.term["component.code.coding.display"] = key;
+            term.term["component.code.coding.code"] = key;
             var range = {};
             range.range = {};
             range.range["component.valueQuantity.value"] = {};
@@ -47,6 +61,39 @@ app.controller("DiagnosticReportsController", ["$scope", "$uibModal", "FHIRServi
             return query;
         }
 
+        var resetPage = function(diagnosticReports) {
+            $scope.diagnosticReports = diagnosticReports;
+            $scope.diagnosticReports.sort(function(dr1, dr2) {
+                if (dr1.resource.meta.lastUpdated > dr2.resource.meta.lastUpdated) {
+                    return 1;
+                }
+                else if (dr1.resource.meta.lastUpdated === dr2.resource.meta.lastUpdated) {
+                    return 0;
+                }
+                else if (dr1.resource.meta.lastUpdated < dr2.resource.meta.lastUpdated) {
+                    return -1;
+                }
+            })
+            populateEncounterStatistics(diagnosticReports);
+            $scope.currentPage = 1;
+            if ($scope.diagnosticReports.length > 20) {
+                $scope.currentPageDiagnosticReports = $scope.diagnosticReports.slice(0, 20);
+            } else {
+                $scope.currentPageDiagnosticReports = $scope.diagnosticReports.slice(0);
+            }
+        }
+
+        var loadingPatientInfo = function(iter) {
+            if (iter < $scope.diagnosticReports.length) {
+                FHIRService.getPatientById($scope.diagnosticReports[iter].resource.subject.reference, function(data) {
+                    $scope.diagnosticReports[iter].patientObj = data.entry[0].resource;
+                    loadingPatientInfo(iter + 1);
+                })
+            } else {
+                $scope.isFilterReady = true;
+            }
+        }
+
         var fetchDiagnosticReport = function(iter) {
             if (iter < patientIds.length) {
                 ElasticService.searchDiagnosticReports(getDiagnosticReportQuery(patientIds[iter]), function(data) {
@@ -59,7 +106,11 @@ app.controller("DiagnosticReportsController", ["$scope", "$uibModal", "FHIRServi
                     fetchDiagnosticReport(iter + 1);
                 });
             } else {
-                populateEncounterStatistics($scope.diagnosticReports);
+                if ($scope.diagnosticReports === 0) {
+                    $scope.diagnosticReportsFound = false;
+                }
+                resetPage($scope.diagnosticReports);
+                loadingPatientInfo(0);
             }
         }
 
@@ -96,9 +147,27 @@ app.controller("DiagnosticReportsController", ["$scope", "$uibModal", "FHIRServi
             $scope.encounterData = [];
             $scope.performerLabels = [];
             $scope.performerData = [];
+            $scope.diagnosisLabels = [];
+            $scope.diagnosisData = [];
+            $scope.diagnosisBarLabels = [];
+            $scope.diagnosisBarData = [];
+            $scope.diagnosisBarDataInner = [];
+            $scope.diagnosisBarSeries = ['Code Diagnosis'];
             diagnosticReports.forEach(function(dr) {
                 addIfNotExisted($scope.encounterLabels, $scope.encounterData, dr.resource.encounter.display);
                 addIfNotExisted($scope.performerLabels, $scope.performerData, dr.resource.performer.display);
+                dr.resource.codedDiagnosis.forEach(function(codeDiagnosis) {
+                    addIfNotExisted($scope.diagnosisLabels, $scope.diagnosisData, codeDiagnosis.text);
+                });
+                dr.resource.codedDiagnosis.forEach(function(codeDiagnosis) {
+                    var text = codeDiagnosis.text;
+                    if (text.length > 7) {
+                        text = text.substr(0, 7) + '...';
+                    }
+                    addIfNotExisted($scope.diagnosisBarLabels, $scope.diagnosisBarDataInner, text);
+                    $scope.diagnosisBarData = [];
+                    $scope.diagnosisBarData.push($scope.diagnosisBarDataInner);
+                });
             });
         }
 
@@ -112,6 +181,68 @@ app.controller("DiagnosticReportsController", ["$scope", "$uibModal", "FHIRServi
                 cnt[idx] += 1;
             }
         }
+
+        /*
+         * Paging Related
+         */
+        $scope.currentPage = 1;
+        $scope.currentPageDiagnosticReports = [];
+        $scope.pageChanged = function() {
+            var start = ($scope.currentPage - 1) * 20;
+            var end = $scope.currentPage * 20;
+            if (end > $scope.diagnosticReports.length) {
+                $scope.currentPageDiagnosticReports = $scope.diagnosticReports.slice(start);
+            }
+            else {
+                $scope.currentPageDiagnosticReports = $scope.diagnosticReports.slice(start, end);
+            }
+        }
+
+        /*
+         * Filter Related
+         */
+        $scope.gender = 'all';
+        //var genderFilter = function(gender) {
+        //    if (gender === 'all') {
+        //        resetPage($scope.origDR);
+        //        return;
+        //    }
+        //    var newDR = [];
+        //    for (var iter = 0; iter < $scope.origDR.length; iter++) {
+        //        if ($scope.origDR[iter].patientObj.subject.gender === gender) {
+        //            newDR.push($scope.origDR[iter]);
+        //        }
+        //    }
+        //    resetPage(newDR);
+        //    return;
+        //}
+        $scope.onGenderFilterChange = function(gender) {
+            //console.log(gender);
+            //genderFilter(gender);
+        }
+
+        //$scope.age = "-1";
+        //$scope.onGenderFilterChange = function(age) {
+        //    console.log(age);
+        //    if (age === "-1") {
+        //
+        //    }
+        //    else if (age === "20") {
+        //
+        //    }
+        //    else if (age === "40") {
+        //
+        //    }
+        //    else if (age === "60") {
+        //
+        //    }
+        //    else if (age === "80") {
+        //
+        //    }
+        //    else if (age === "9999") {
+        //
+        //    }
+        //}
     }
 ]);
 
