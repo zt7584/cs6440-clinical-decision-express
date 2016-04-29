@@ -38,10 +38,16 @@ var GET_PRACTITIONER_BY_ID = BASE_URL + "Practitioner?_id=" + ID_HOLDER;
 var GET_CONDITION_BY_ID = BASE_URL + "Condition?_id=" + ID_HOLDER;
 
 var getPatientName = function (patient) {
-    return patient.name[0].given.join(" ") + " " + patient.name[0].family.join(" ");
+    if (patient.name !== undefined && patient.name.length > 0) {
+        return patient.name[0].given.join(" ") + " " + patient.name[0].family.join(" ");
+    }
+    return "";
 }
 
 var getPatientAddress = function (patient) {
-    return patient.address[0].line + ", " + patient.address[0].city + ", "
-        + patient.address[0].state + " " + patient.address[0].postalCode;
+    if (patient.address !== undefined && patient.address.length > 0) {
+        return patient.address[0].line + ", " + patient.address[0].city + ", "
+            + patient.address[0].state + " " + patient.address[0].postalCode;
+    }
+    return "";
 }
