@@ -106,7 +106,7 @@ app.controller("DiagnosticReportsController", ["$scope", "$uibModal", "FHIRServi
                     fetchDiagnosticReport(iter + 1);
                 });
             } else {
-                if ($scope.diagnosticReports === 0) {
+                if ($scope.diagnosticReports.length === 0) {
                     $scope.diagnosticReportsFound = false;
                 }
                 resetPage($scope.diagnosticReports);
